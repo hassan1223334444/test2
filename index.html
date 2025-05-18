@@ -1,0 +1,88 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arabic to QWERTY Converter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Arabic to QWERTY Converter</h1>
+  <textarea id="arabicInput" placeholder="Enter Arabic text here..."></textarea>
+  <button onclick="convertText()">Convert</button>
+  <textarea id="outputText" placeholder="Converted text will appear here..."></textarea>
+  <button onclick="copyOutput()">Copy</button>
+
+  <script>
+    const arabicToQwerty = {
+      'ض': 'q', 'ص': 'w', 'ث': 'e', 'ق': 'r', 'ف': 't',
+      'غ': 'y', 'ع': 'u', 'ه': 'i', 'خ': 'o', 'ح': 'p',
+      'ج': '[', 'د': ']', 'ش': 'a', 'س': 's', 'ي': 'd',
+      'ب': 'f', 'ل': 'g', 'ا': 'h', 'ت': 'j', 'ن': 'k',
+      'م': 'l', 'ك': ';', 'ط': "'", 'ئ': 'z', 'ء': 'x',
+      'ؤ': 'c', 'ر': 'v', 'لا': 'b', 'ى': 'n', 'ة': 'm',
+      'و': ',', 'ز': '.', 'ظ': '/'
+    };
+
+    function convertText() {
+      let input = document.getElementById("arabicInput").value;
+      let output = '';
+      let skipNext = false;
+
+      for (let i = 0; i < input.length; i++) {
+        if (skipNext) {
+          skipNext = false;
+          continue;
+        }
+
+        if (input[i] === 'ل' && input[i + 1] === 'ا') {
+          output += arabicToQwerty['لا'] || '';
+          skipNext = true;
+        } else {
+          output += arabicToQwerty[input[i]] || input[i];
+        }
+      }
+
+      document.getElementById("outputText").value = output;
+    }
+
+    function copyOutput() {
+      const output = document.getElementById("outputText");
+      output.select();
+      document.execCommand("copy");
+      alert("Copied to clipboard!");
+    }
+  </script>
+</body>
+</html>
